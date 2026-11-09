@@ -2,7 +2,7 @@ name: Captura Bronce
 
 on:
   schedule:
-    - cron: "0 12 * * 1"   # lunes 06:00 Colima; los informes salen ~1 vez al mes
+    - cron: "0 13 * * *"   # diario 07:00 Colima (tipo de cambio diario; puertos solo baja informes nuevos)
   workflow_dispatch:
 
 permissions:
@@ -17,9 +17,12 @@ jobs:
         with:
           python-version: "3.12"
       - run: sudo apt-get install -y poppler-utils
-      - run: python extractor/puertos.py --test
-      - run: python extractor/puertos.py
+      - run: python extractores/puertos.py --test
+      - run: python extractores/tipo_cambio.py
+      - run: python extractores/puertos.py
+        if: always()   # una fuente caída no detiene a la otra
       - name: Guardar datos nuevos
+        if: always()   # la bitácora se guarda aunque una captura falle
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

@@ -67,7 +67,7 @@ Manzanillo es el puerto con más movimiento de contenedores de México: en 2025 
 ### E2. Factores a experimentar
 **¿Qué factores cambian de forma significativa el movimiento mensual de contenedores en Manzanillo?**
 - **Factor A, temporada:** meses de temporada alta (agosto a noviembre, compras navideñas) contra el resto del año.
-- **Factor B, tipo de cambio:** meses con peso fuerte contra peso débil, separados por la mediana del tipo de cambio FIX de Banxico.
+- **Factor B, tipo de cambio:** meses con peso fuerte contra peso débil, separados por la mediana del tipo de cambio USD/MXN (fuente 2).
 - **Factor C, tipo de tráfico:** importación contra exportación. Ambos vienen en la tabla "contenedores por tipo de movimiento" del mismo informe.
 - Diseño propuesto: ANOVA factorial sobre los TEU mensuales.
 
@@ -90,14 +90,17 @@ Manzanillo es el puerto con más movimiento de contenedores de México: en 2025 
 | Formato | PDF mensual de unos 5 MB, con tablas de carga, buques, contenedores y pasajeros por puerto |
 | Método | Descarga de los PDF enlazados y extracción de la tabla "Total de contenedores operados por tipo de tráfico (TEUS)" con `pdftotext` |
 | Periodos | 2022-01 a 2025-12 (48 informes) más la columna del año anterior, que cubre 2021 |
-| Automatización | GitHub Actions (`.github/workflows/captura-bronce.yml`), cada lunes y a mano con *Run workflow* |
+| Estructura | Tabla por puerto: ubicación, TEU de altura, de cabotaje y totales, año anterior y año actual (acumulado enero–mes) |
+| Frecuencia | Mensual. La CGPMM publica cada informe con 1 o 2 meses de retraso |
+| Bronce | `data/bronce/puertos/teus/AAAA-MM.csv` y `data/bronce/puertos/manifiesto.csv` (URL, sha256, periodo, fecha de captura) |
+| Automatización | GitHub Actions (`.github/workflows/captura-bronce.yml`), diario a las 07:00 de Colima y a mano con *Run workflow*. Solo descarga informes nuevos |
 
 **Análisis ético y legal**
 
 - **robots.txt** (https://www.gob.mx/robots.txt, revisado el 8 de noviembre de 2026): solo tiene reglas para los agentes de Google, todas con `Disallow:` vacío. No hay ninguna ruta prohibida, y las páginas de informes y la carpeta `/cms/uploads/` quedan permitidas.
 - **Términos de uso** (https://www.gob.mx/terminos):
   - "La información del portal gob.mx es pública a menos que se indique lo contrario". Los informes no indican derechos reservados.
-  - Quien "reproduzca o procese información contenida en gob.mx deberá referir la localización electrónica y fecha en que se realizó la consulta". **Lo cumplimos con `data/bronce/manifiesto.csv`**, que guarda la URL exacta, la fecha y hora de descarga y el hash sha256 de cada PDF.
+  - Quien "reproduzca o procese información contenida en gob.mx deberá referir la localización electrónica y fecha en que se realizó la consulta". **Lo cumplimos con `data/bronce/puertos/manifiesto.csv`**, que guarda la URL exacta, la fecha y hora de descarga y el hash sha256 de cada PDF.
   - Los materiales se autorizan "para su uso personal y no para un uso comercial", y no deben reproducirse ni mostrarse comercialmente. Por eso **no redistribuimos los PDF**: solo guardamos las cifras extraídas, que son información pública, y siempre citamos la fuente. El uso es académico. Si el observatorio se comercializa más adelante (E4), habrá que pedir autorización a la CGPMM o usar la vía de datos abiertos.
 - **Buenas prácticas del extractor:**
   - User-Agent que identifica el proyecto y el repositorio.
@@ -106,21 +109,26 @@ Manzanillo es el puerto con más movimiento de contenedores de México: en 2025 
   - No usa credenciales ni pasa por formularios.
 - **Datos personales:** ninguno. Son cifras agregadas por puerto.
 
-### Fuente 2 (complementaria): Banxico SIE API, tipo de cambio FIX
+### Fuente 2 (funcionando): Frankfurter API, tipo de cambio USD/MXN
 
 | Aspecto | Detalle |
 |---|---|
-| Publica | Banco de México, Sistema de Información Económica |
-| URL | https://www.banxico.org.mx/SieAPIRest/service/v1/ (serie `SF43718`, tipo de cambio FIX peso-dólar) |
-| Formato | API REST JSON con token gratuito |
-| Uso | Factor B de E2 y variable explicativa del pronóstico en E1 (promedio mensual del FIX) |
-| Estado | El token se guarda como *secret* `BANXICO_TOKEN` de GitHub, nunca en el código |
+| Publica | Frankfurter (https://frankfurter.dev), API de código abierto que publica las tasas de referencia diarias del Banco Central Europeo |
+| URL | `https://api.frankfurter.dev/v1/AAAA-MM-DD..?from=USD&to=MXN` |
+| Estructura | JSON: `{"base":"USD","start_date","end_date","rates":{"AAAA-MM-DD":{"MXN":valor}}}` |
+| Formato | API REST JSON, sin token |
+| Frecuencia | Diaria, en días hábiles del BCE |
+| Método | Petición GET por corrida, solo desde la última fecha guardada (la primera trae la historia desde 2021, unas 1,500 fechas) |
+| Bronce | `data/bronce/tipo_cambio/AAAA-MM-DD.json`: respuesta tal cual llegó, más fuente, URL y fecha de captura |
+| Uso | Factor B de E2 (peso fuerte contra peso débil) y variable explicativa del pronóstico en E1 (promedio mensual) |
 
 **Análisis ético y legal**
 
-- **robots.txt** (https://www.banxico.org.mx/robots.txt): solo prohíbe `/dyn/` y `/ALEPH`. La API está en `/SieAPIRest/`, así que está permitida, y además es un canal oficial pensado para el acceso automatizado.
-- **Términos de uso:** Banxico ofrece la API para consulta pública con un token personal y límites de consultas por día. Respetamos ese límite con una sola consulta por ejecución que trae toda la serie. Se cita a Banco de México como fuente.
+- **robots.txt** (https://api.frankfurter.dev/robots.txt, revisado el 9 de noviembre de 2026): `User-agent: * / Allow: /`. Todo está permitido.
+- **Términos de uso** (https://frankfurter.dev/license/): software con licencia MIT. Su documentación dice que no hay cuotas diarias ni mensuales, solo un límite de velocidad contra abuso. Hacemos 1 petición al día y citamos al Banco Central Europeo como fuente original de las tasas.
 - **Datos personales:** ninguno.
+
+**Fuente alternativa para E1: Banxico SIE (tipo de cambio FIX, serie `SF43718`).** Es la cifra oficial en México, pero pide un token gratuito. Su `robots.txt` solo prohíbe `/dyn/` y `/ALEPH`, y la API (`/SieAPIRest/`) está permitida. Si se tramita el token, se guardará como *secret* `BANXICO_TOKEN` y servirá para validar las cifras de Frankfurter.
 
 ### Fuente 3 (respaldo): ASIPONA Manzanillo
 
@@ -129,10 +137,12 @@ El sitio de la Administración del Sistema Portuario Nacional Manzanillo publica
 ### Arquitectura de capas
 
 ```
-gob.mx (PDF mensuales) ──► extractor/puertos.py ──► data/bronce/teus/AAAA-MM.csv   (Bronce: cifras tal cual, acumuladas)
-Banxico API ─────────────► (E1)                 ──► data/bronce/manifiesto.csv     (procedencia: URL, fecha, sha256)
-                                                    data/plata/  (E1: TEU mensual = diferencia de acumulados, validaciones)
-                                                    data/oro/    (E2–E3: integración con tipo de cambio y comparativo de puertos)
+gob.mx (PDF mensuales) ──► extractores/puertos.py     ──► data/bronce/puertos/teus/AAAA-MM.csv  (TEU acumulados, tal cual)
+                                                        └► data/bronce/puertos/manifiesto.csv   (URL, fecha, sha256)
+Frankfurter API (BCE) ───► extractores/tipo_cambio.py ──► data/bronce/tipo_cambio/AAAA-MM-DD.json (respuesta cruda + metadatos)
+ambos ───────────────────► extractores/bitacora.py    ──► data/bronce/bitacora.csv             (una fila por corrida: estado, registros, error)
+                                                          data/plata/  (E1: TEU mensual = diferencia de acumulados, validaciones)
+                                                          data/oro/    (E2–E3: integración con tipo de cambio y comparativo de puertos)
 ```
 
 ---

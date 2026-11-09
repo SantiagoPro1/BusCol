@@ -9,8 +9,8 @@ import csv, datetime, hashlib, re, subprocess, sys, tempfile, time, urllib.reque
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-BRONCE = RAIZ / "data" / "bronce" / "teus"
-MANIFIESTO = RAIZ / "data" / "bronce" / "manifiesto.csv"
+BRONCE = RAIZ / "data" / "bronce" / "puertos" / "teus"
+MANIFIESTO = RAIZ / "data" / "bronce" / "puertos" / "manifiesto.csv"
 PAGINA = "https://www.gob.mx/puertosymarinamercante/acciones-y-programas/informe-estadistico-de-los-puertos-de-mexico-{}"
 UA = "ObservatorioManzanillo/1.0 (proyecto escolar; github.com/SantiagoPro1/ManzanilloAduanas)"
 PAUSA = 3  # segundos entre peticiones, para no cargar el servidor
@@ -88,6 +88,7 @@ def main():
                 w.writeheader()
             w.writerows(nuevos)
     print(f"{len(nuevos)} PDF nuevos; {len(list(BRONCE.glob('*.csv')))} periodos en bronce")
+    return len(nuevos)
 
 
 if __name__ == "__main__":
@@ -99,4 +100,5 @@ if __name__ == "__main__":
         assert mes == 9 and filas[0] == ["MANZANILLO, COL.", "2911798", "2880209", "0", "0", "2911798", "2880209"], (mes, filas)
         print("ok")
     else:
-        main()
+        from bitacora import registrar
+        registrar("puertos", main)

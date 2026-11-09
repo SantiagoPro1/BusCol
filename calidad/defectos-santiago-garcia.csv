@@ -1,1 +1,1 @@
-id,fecha,tipo,fase_inyeccion,fase_remocion,tiempo_correccion_min,descripcion
+numero,fecha,tipo,fase_introducido,fase_eliminado,minutos_correccion,defecto_origen,descripcion
