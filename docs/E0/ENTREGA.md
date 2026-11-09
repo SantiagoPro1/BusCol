@@ -6,7 +6,7 @@
 | Entrega | E0, pregunta central, validación y capa Bronce |
 | Tag | `e0` |
 | Repositorio | https://github.com/SantiagoPro1/observatorio-comercio-manzanillo |
-| Integrantes | Joel Emiliano Salazar Figueroa (@EmiSalazarrrr) · _[segundo integrante]_ (@SantiagoPro1) |
+| Integrantes | Joel Emiliano Salazar Figueroa (@EmiSalazarrrr) · Santiago García García (@SantiagoPro1) |
 | Fecha límite | lunes 9 de noviembre de 2026, 23:59 |
 
 ## Entregables

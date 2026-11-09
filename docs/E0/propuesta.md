@@ -1,7 +1,7 @@
 # Propuesta del Observatorio — Trusted Data Lab
 
 **Observatorio del Comercio por el Puerto de Manzanillo**
-Equipo: Joel Emiliano Salazar Figueroa · _[NOMBRE DEL SEGUNDO INTEGRANTE]_
+Equipo: Joel Emiliano Salazar Figueroa · Santiago García García
 Repositorio: https://github.com/SantiagoPro1/observatorio-comercio-manzanillo
 
 ---
