@@ -1,0 +1,28 @@
+name: Captura Bronce
+
+on:
+  schedule:
+    - cron: "0 12 * * 1"   # lunes 06:00 Colima; los informes salen ~1 vez al mes
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  capturar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get install -y poppler-utils
+      - run: python extractor/puertos.py --test
+      - run: python extractor/puertos.py
+      - name: Guardar datos nuevos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/bronce
+          git diff --cached --quiet || git commit -m "bronce: captura automática $(date -u +%F)"
+          git push
