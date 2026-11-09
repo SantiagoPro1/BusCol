@@ -5,7 +5,7 @@
 | Proyecto | Trusted Data Lab: Observatorio del Comercio por el Puerto de Manzanillo |
 | Entrega | E0, pregunta central, validación y capa Bronce |
 | Tag | `e0` |
-| Repositorio | https://github.com/SantiagoPro1/observatorio-comercio-manzanillo |
+| Repositorio | https://github.com/SantiagoPro1/ManzanilloAduanas |
 | Integrantes | Joel Emiliano Salazar Figueroa (@EmiSalazarrrr) · Santiago García García (@SantiagoPro1) |
 | Fecha límite | lunes 9 de noviembre de 2026, 23:59 |
 

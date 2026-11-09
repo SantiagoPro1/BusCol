@@ -12,7 +12,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 BRONCE = RAIZ / "data" / "bronce" / "teus"
 MANIFIESTO = RAIZ / "data" / "bronce" / "manifiesto.csv"
 PAGINA = "https://www.gob.mx/puertosymarinamercante/acciones-y-programas/informe-estadistico-de-los-puertos-de-mexico-{}"
-UA = "ObservatorioManzanillo/1.0 (proyecto escolar; github.com/SantiagoPro1/observatorio-comercio-manzanillo)"
+UA = "ObservatorioManzanillo/1.0 (proyecto escolar; github.com/SantiagoPro1/ManzanilloAduanas)"
 PAUSA = 3  # segundos entre peticiones, para no cargar el servidor
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
          "agosto", "septiembre", "octubre", "noviembre", "diciembre"]

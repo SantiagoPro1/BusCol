@@ -2,7 +2,7 @@
 
 **Observatorio del Comercio por el Puerto de Manzanillo**
 Equipo: Joel Emiliano Salazar Figueroa · Santiago García García
-Repositorio: https://github.com/SantiagoPro1/observatorio-comercio-manzanillo
+Repositorio: https://github.com/SantiagoPro1/ManzanilloAduanas
 
 ---
 
