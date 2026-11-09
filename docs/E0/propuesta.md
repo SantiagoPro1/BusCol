@@ -25,34 +25,34 @@ Manzanillo es el puerto con más movimiento de contenedores de México: en 2025 
 
 ## 2. Entrevista de campo
 
-> **Estado:** pendiente. Esta sección se llena después de la entrevista, que debe durar al menos 15 minutos.
+> ⚠️ **Entrevista SIMULADA, pendiente de validar con un actor real.** Las respuestas de abajo las redactó el equipo como hipótesis de lo que respondería alguien del sector. **No son declaraciones de una persona real.** Antes de E1 se repetirá el guion con un actor real y esta sección se reemplazará con sus respuestas.
 
 | Campo | Dato |
 |---|---|
-| Entrevistado(a) | _[nombre o iniciales, si pide anonimato]_ |
-| Puesto y empresa | _[ej. tramitador en agencia aduanal, operador de transportista]_ |
-| Fecha, hora y medio | _[presencial / llamada / videollamada]_ |
-| Duración | _[min]_ |
-| Entrevistó | _[integrante]_ |
+| Perfil simulado | Coordinador(a) de tráfico en una empresa transportista de contenedores de Manzanillo (anónimo) |
+| Medio | Ejercicio de escritorio, no hubo entrevista real |
+| Entrevista real | Pendiente |
+| Preparó | Equipo |
 
-### Guion y respuestas
+### Guion y respuestas (hipótesis)
 
 1. **¿En qué meses o temporadas se nota más el aumento o la caída de contenedores en su trabajo y cómo se preparan?**
-   _Respuesta:_
+   _Hipótesis:_ De agosto a noviembre sube la importación de Asia por la temporada navideña, y en enero y febrero baja. En temporada alta se contratan operadores eventuales y se rentan unidades extra.
 2. **Cuando el puerto se satura, ¿qué problemas le causa a su empresa (tiempos, costos, clientes)? ¿Con cuánta anticipación les gustaría saberlo?**
-   _Respuesta:_
+   _Hipótesis:_ Filas de horas en los accesos y en el patio, citas perdidas y penalizaciones por demoras (*demurrage*) que terminan pagando los clientes. Les gustaría saberlo con 1 o 2 meses de anticipación para contratar a tiempo.
 3. **¿Qué factores cree que más afectan el volumen de carga: el tipo de cambio, la demanda de EE. UU., Asia, el clima o los bloqueos?**
-   _Respuesta:_
+   _Hipótesis:_ La demanda de importaciones (sobre todo de Asia), el tipo de cambio, los huracanes que cierran el puerto y los bloqueos carreteros en la salida a Guadalajara.
 4. **¿Hoy cómo deciden cuántas unidades o cuánto personal necesitan? ¿Usan algún dato o pronóstico, o es por experiencia?**
-   _Respuesta:_
+   _Hipótesis:_ Por experiencia y por lo que les avisan los clientes y las navieras con pocos días de margen. No usan ningún pronóstico formal.
 5. **Si tuviera un tablero con el pronóstico mensual de contenedores y una comparación con Lázaro Cárdenas, ¿lo usaría? ¿Cuánto valdría para su empresa?**
-   _Respuesta:_
+   _Hipótesis:_ Sí, si se actualiza cada mes y explica por qué sube o baja. La comparación con Lázaro Cárdenas sirve porque compiten por la misma carga.
 
-### Aprendizajes
+### Aprendizajes esperados (a confirmar con la entrevista real)
 
-- _[Aprendizaje 1: qué confirmó o cambió de la pregunta detonadora]_
-- _[Aprendizaje 2: qué variable o factor nuevo apareció]_
-- _[Aprendizaje 3: qué tan dispuesto está el cliente a usar o pagar el observatorio]_
+- **La estacionalidad es el factor principal.** Esto refuerza el factor A de E2 (temporada alta de agosto a noviembre).
+- **Hay factores externos que la serie de TEU no trae**, como huracanes y bloqueos. Se pueden agregar en E1 o E2 como variables indicadoras (*dummies*) de evento.
+- **El valor para el cliente está en anticiparse 1 o 2 meses.** Por eso el horizonte de pronóstico de E1 debe cubrir por lo menos ese plazo.
+- **La comparación con Lázaro Cárdenas tiene sentido de negocio.** Los datos de Bronce lo apoyan: en 2025 Manzanillo bajó 0.8 % y Lázaro Cárdenas subió 8.7 % (CGPMM, informe de diciembre de 2025). Esto respalda los grupos de E3.
 
 ---
 

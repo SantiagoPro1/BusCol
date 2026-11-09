@@ -13,7 +13,7 @@
 
 | # | Entregable | Ubicación | Estado |
 |---|---|---|---|
-| 1 | Propuesta del observatorio | `docs/E0/propuesta.md` | ✅ (entrevista: ver sección 2) |
+| 1 | Propuesta del observatorio | `docs/E0/propuesta.md` | ⚠️ entrevista simulada; pendiente la real (sección 2) |
 | 2a | Extractor ético | `extractor/puertos.py` | ✅ |
 | 2b | Ejecución automática | `.github/workflows/captura-bronce.yml` (cada lunes + manual) | ✅ |
 | 2c | Serie histórica cruda ≥ 36 periodos | `data/bronce/teus/` + `data/bronce/manifiesto.csv` | ✅ |
