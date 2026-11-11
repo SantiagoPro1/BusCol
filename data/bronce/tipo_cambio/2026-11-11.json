@@ -1,0 +1,16 @@
+{
+ "fuente": "Frankfurter API (BCE)",
+ "url": "https://api.frankfurter.dev/v1/2026-11-10..?from=USD&to=MXN",
+ "capturado_utc": "2026-11-11T19:55:03+00:00",
+ "respuesta": {
+  "amount": 1.0,
+  "base": "USD",
+  "start_date": "2026-11-10",
+  "end_date": "2026-11-11",
+  "rates": {
+   "2026-11-11": {
+    "MXN": 18.6591
+   }
+  }
+ }
+}
