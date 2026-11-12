@@ -10,15 +10,14 @@ Proyecto integrador **Trusted Data Lab**: tiempos de recorrido y retrasos de las
 
 ## Qué observa
 
-- **Tiempo de recorrido con tráfico** de "Los Rojos" a 8 destinos, cada hora (TomTom Routing API)
+- **GPS de los camiones** de 8 rutas desde "Los Rojos": ⚠️ **simulado** hasta que la concesionaria dé acceso al real (cada fila lleva `simulado=1`)
 - **Paradas de camión** de Colima, una vez al día (OpenStreetMap vía Overpass)
-- **GPS de las unidades** cuando la concesionaria dé acceso
 
 ## Cómo se ejecuta
 
 ```bash
-python3 extractores/rutas.py --test          # autoprueba
-TOMTOM_KEY=... python3 extractores/rutas.py  # tiempos de las 8 rutas en este momento
+python3 extractores/gps_simulado.py --test   # autoprueba del simulador
+python3 extractores/gps_simulado.py          # viajes desde 2026-08-01 y pings de la última hora
 python3 extractores/paradas.py               # paradas OSM (una vez al día)
 ```
 
@@ -34,4 +33,4 @@ Solo usa la biblioteca estándar de Python 3.11 o superior. En GitHub corre solo
 | `calidad/` | Registros PSP por integrante y objetivos de calidad |
 | `.github/workflows/` | Captura programada |
 
-Paradas y ubicaciones: © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) (ODbL). Tiempos de recorrido: TomTom.
+Paradas y ubicaciones: © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) (ODbL). Trazos de ruta: OSRM sobre OpenStreetMap.

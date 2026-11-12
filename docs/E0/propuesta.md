@@ -58,7 +58,7 @@ Lo que dijo, en resumen:
 ### E1. Variable a pronosticar
 **¿Cuántos minutos tardará cada ruta desde "Los Rojos" en la siguiente hora y el siguiente día?**
 - Variable: tiempo de recorrido (minutos) por ruta y por hora.
-- Fuente: el GPS de las unidades cuando la empresa dé acceso (datos reales de cada camión). Mientras tanto, y después como comparación, el tiempo con tráfico de TomTom.
+- Fuente: el GPS de las unidades. Mientras la concesionaria no dé acceso se usa el **GPS simulado** (fuente 1). Cuando llegue el GPS real, el mismo análisis se repite con los datos reales.
 
 ### E2. Factores a experimentar
 **¿Qué factores aumentan de forma significativa el tiempo de recorrido?**
@@ -78,18 +78,23 @@ Lo que dijo, en resumen:
 
 ## 4. Plan de recopilación de datos
 
-### Fuente 1: tiempos de recorrido con tráfico (TomTom Routing API)
+### Fuente 1: GPS de las unidades. ⚠️ SIMULADO hasta tener acceso al real
+
+> **Datos sintéticos.** La concesionaria todavía no da acceso a su GPS. Para no detener el pipeline, BusCol **simula** el GPS con la misma estructura que tendrá el real. Cada fila lleva `simulado=1` y las unidades se llaman `SIM-…`. Los resultados estadísticos sobre estos datos solo prueban que el método funciona, no dicen nada del transporte real de Colima. Cuando la empresa dé acceso, este extractor se reemplaza por el real y se conservan las mismas columnas.
 
 | Aspecto | Detalle |
 |---|---|
-| Qué mide | Tiempo de recorrido con tráfico, retraso por tráfico y distancia de "Los Rojos" a 8 destinos |
-| URL | `https://api.tomtom.com/routing/1/calculateRoute/{origen}:{destino}/json?traffic=true&travelMode=bus` |
-| Estructura | JSON → `routes[0].summary`: `travelTimeInSeconds`, `trafficDelayInSeconds`, `lengthInMeters`, `departureTime`, `arrivalTime` |
-| Formato y acceso | API REST con clave gratuita (*secret* `TOMTOM_KEY`) |
-| Frecuencia | Cada hora con GitHub Actions: 8 rutas × 24 = 192 peticiones al día, de un límite gratuito de 2,500 |
-| Bronce | `data/bronce/rutas/AAAA-MM-DD.jsonl`, una línea por ruta y hora con fuente y hora de captura |
-| robots.txt | `https://api.tomtom.com/robots.txt` responde 404, así que no hay restricciones publicadas para la API |
-| Términos | ⚠️ **Por verificar.** Las condiciones de TomTom podrían limitar el guardado permanente de resultados. Antes de acumular historia hay que revisar sus términos para el plan gratuito. Si no lo permiten, esta fuente se reemplaza por la fuente 3 |
+| Qué simula | 8 rutas desde "Los Rojos": 4 metropolitanas (Villa de Álvarez, Comala, Coquimatlán, Cuauhtémoc) y 4 foráneas (Ixtlahuacán, Tecomán, Minatitlán, Manzanillo), con su horario de salidas y número de unidades |
+| Cómo | Trazo real por calles (OSRM sobre OpenStreetMap). Duración = tiempo OSRM × 1.35 (autobús) + 30 s por parada. Ajustes: hora pico (+25 % metropolitanas, +12 % foráneas), fin de semana (−10 %), ruido aleatorio (σ = 8 %) e incidentes (2 % de los viajes, +10 a 40 min). Es determinista: el mismo día da los mismos viajes |
+| Estructura | `viajes/AAAA-MM-DD.csv`: fecha, ruta, tipo, unidad, salida programada y real, llegada, minutos, minutos base, retraso, incidente, simulado. `pings/AAAA-MM-DD.csv`: ts, unidad, ruta, lat, lon, progreso, simulado |
+| Frecuencia | Cada hora con GitHub Actions: los viajes terminados del día y la posición de cada unidad cada 5 minutos de la hora anterior |
+| Serie histórica | Desde el 1 de agosto de 2026: **más de 100 días y más de 26,000 viajes** (≥ 36 periodos) |
+| Bronce | `data/bronce/gps_simulado/` y trazos en `data/referencia/trazos_osrm.json` |
+| Ética | Al ser simulados, no contienen datos de personas ni de empresas reales. Siempre se presentan como simulados |
+
+**GPS real (pendiente de acceso):** se tomará de la plataforma de la concesionaria solo con su autorización por escrito y en el formato que indiquen (API, exportación o plataforma). No se hará *scraping* de su plataforma. No se guardarán datos de conductores ni de pasajeros, y las ubicaciones en vivo solo se publicarán con permiso de la empresa.
+
+**Fuente descartada: TomTom Routing API.** Se probó para medir tiempos con tráfico, pero sus términos (https://docs.tomtom.com/legal/terms-and-conditions) **prohíben guardar resultados** (cláusula 11.4), **crear bases de datos derivadas** (11.6.1) y limitan la cuenta gratuita a "evaluación y pruebas internas" (2.2). Por eso se borraron su extractor y sus datos el 12 de noviembre de 2026.
 
 ### Fuente 2: paradas de camión de OpenStreetMap (Overpass API), funcionando
 
@@ -106,18 +111,11 @@ Lo que dijo, en resumen:
 | robots.txt | `Disallow: /api/` para todos los agentes. Va dirigido a buscadores. La política de uso de Overpass permite expresamente consultas por API (menos de 10,000 al día y 1 GB). Hacemos 1 al día |
 | Términos y licencia | Datos de OpenStreetMap con licencia **ODbL**: se pueden usar y guardar citando "© OpenStreetMap contributors", y los datos derivados se comparten con la misma licencia |
 
-### Fuente 3: GPS de las unidades (pendiente de acceso)
-
-- **Qué es:** la ubicación en tiempo real de los camiones, tomada de la plataforma GPS de la concesionaria. Es la fuente principal del producto.
-- **Acceso:** solo con autorización por escrito del corporativo, en la forma que ellos indiquen (API, exportación o plataforma). No haremos *scraping* de su plataforma sin permiso.
-- **Ética:** son datos de unidades, no de personas. No se guardan datos de conductores ni de pasajeros. Las ubicaciones en vivo solo se publican con permiso de la empresa.
-
 ### Arquitectura de capas
 
 ```
-TomTom Routing API ──► extractores/rutas.py ──► data/bronce/rutas/AAAA-MM-DD.jsonl   (tiempo por ruta y hora)
+GPS (simulado → real) ► extractores/gps_simulado.py ► data/bronce/gps_simulado/{viajes,pings}/  (viajes y posiciones)
 OSM / Overpass ──────► extractores/paradas.py ► data/bronce/paradas/AAAA-MM-DD.json  (paradas, 1 vez al día)
-GPS concesionaria ───► (cuando haya acceso)  ──► data/bronce/gps/
 ambos ───────────────► extractores/bitacora.py ► data/bronce/bitacora.csv            (una fila por corrida)
                                                data/plata/ (E1: tiempos limpios por ruta y hora, con sus paradas)
                                                data/oro/   (E2–E3: retrasos por factor y perfil por ruta)

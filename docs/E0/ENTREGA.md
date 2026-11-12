@@ -7,7 +7,7 @@ Equipo: Joel Emiliano Salazar Figueroa (@EmiSalazarrrr) · Santiago García Garc
 ## Resumen en tres líneas
 
 1. Medimos cuánto tardan las rutas que salen de la Central "Los Rojos" y qué las retrasa, para avisar al pasajero cuándo llega su camión.
-2. La captura corre cada hora con GitHub Actions: tiempos de recorrido con tráfico de 8 rutas (TomTom) y paradas de camión de OpenStreetMap (161 paradas, una vez al día). Cuando la concesionaria dé acceso, se suma el GPS real de los camiones.
+2. La captura corre cada hora con GitHub Actions: GPS de 8 rutas (⚠️ **simulado** hasta que la concesionaria dé acceso al real) y paradas de camión de OpenStreetMap (161 paradas, una vez al día).
 3. El sistema de calidad arranca con registros PSP individuales, una bitácora de cada corrida y 3 objetivos medibles.
 
 ## Ingeniería de Datos
@@ -15,9 +15,9 @@ Equipo: Joel Emiliano Salazar Figueroa (@EmiSalazarrrr) · Santiago García Garc
 | Criterio de la rúbrica | Evidencia (enlace) | Nota del equipo |
 |---|---|---|
 | Plan de recopilación | [propuesta.md § 4](propuesta.md#4-plan-de-recopilación-de-datos) | 3 fuentes con estructura, formato, frecuencia, robots.txt y términos |
-| Dos fuentes funcionando | [extractores/rutas.py](../../extractores/rutas.py) · [extractores/paradas.py](../../extractores/paradas.py) | Las dos corren solas. Falta verificar los términos de TomTom para el guardado |
+| Dos fuentes funcionando | [extractores/gps_simulado.py](../../extractores/gps_simulado.py) · [extractores/paradas.py](../../extractores/paradas.py) | El GPS es simulado y está declarado. TomTom se descartó por sus términos (ver propuesta § 4) |
 | Una fuente programada | [.github/workflows/captura-bronce.yml](../../.github/workflows/captura-bronce.yml) | Cada hora, más ejecución manual |
-| Serie de 36 o más periodos | [data/bronce/rutas/](../../data/bronce/rutas/) | 1 periodo por hora desde el 12-nov-2026 03:38 UTC. Llega a 36 periodos el 13-nov a las ~15:40 UTC |
+| Serie de 36 o más periodos | [data/bronce/gps_simulado/viajes/](../../data/bronce/gps_simulado/viajes/) | Más de 100 días (desde 2026-08-01) y más de 26,000 viajes **simulados** |
 | Metadatos de captura | Cada archivo de bronce | Fuente, URL y hora de captura (UTC) |
 
 ## Análisis Estadístico

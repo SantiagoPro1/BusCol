@@ -13,16 +13,13 @@ concurrency: captura   # nunca dos capturas a la vez escribiendo los mismos arch
 jobs:
   capturar:
     runs-on: ubuntu-latest
-    env:
-      TOMTOM_KEY: ${{ secrets.TOMTOM_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python extractores/rutas.py --test
-      - run: python extractores/rutas.py
-        if: env.TOMTOM_KEY != ''   # sin clave no se intenta (evita una corrida en rojo cada hora)
+      - run: python extractores/gps_simulado.py --test
+      - run: python extractores/gps_simulado.py
       - run: python extractores/paradas.py --test
       - run: python extractores/paradas.py
         if: always()   # una fuente caída no detiene a la otra
