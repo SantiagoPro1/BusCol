@@ -23,7 +23,8 @@ jobs:
       - run: python extractores/rutas.py --test
       - run: python extractores/rutas.py
         if: env.TOMTOM_KEY != ''   # sin clave no se intenta (evita una corrida en rojo cada hora)
-      - run: python extractores/clima.py
+      - run: python extractores/paradas.py --test
+      - run: python extractores/paradas.py
         if: always()   # una fuente caída no detiene a la otra
       - name: Guardar datos nuevos
         if: always()   # la bitácora se guarda aunque una captura falle

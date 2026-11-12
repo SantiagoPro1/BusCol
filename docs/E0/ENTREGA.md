@@ -1,4 +1,4 @@
-# Entrega E0 · Observatorio de Rutas Suburbanas de Colima _(nombre provisional)_
+# Entrega E0 · BusCol: observatorio de rutas suburbanas de Colima
 
 Equipo: Joel Emiliano Salazar Figueroa (@EmiSalazarrrr) · Santiago García García (@SantiagoPro1) · Etiqueta: `e0` (versión Manzanillo) · Tablero: pendiente (E1)
 
@@ -7,7 +7,7 @@ Equipo: Joel Emiliano Salazar Figueroa (@EmiSalazarrrr) · Santiago García Garc
 ## Resumen en tres líneas
 
 1. Medimos cuánto tardan las rutas que salen de la Central "Los Rojos" y qué las retrasa, para avisar al pasajero cuándo llega su camión.
-2. La captura corre cada hora con GitHub Actions: clima desde 2022 (42,600 horas) y tiempos de recorrido con tráfico de 8 rutas (en cuanto se configure la clave de TomTom).
+2. La captura corre cada hora con GitHub Actions: tiempos de recorrido con tráfico de 8 rutas (TomTom) y paradas de camión de OpenStreetMap (161 paradas, una vez al día). Cuando la concesionaria dé acceso, se suma el GPS real de los camiones.
 3. El sistema de calidad arranca con registros PSP individuales, una bitácora de cada corrida y 3 objetivos medibles.
 
 ## Ingeniería de Datos
@@ -15,9 +15,9 @@ Equipo: Joel Emiliano Salazar Figueroa (@EmiSalazarrrr) · Santiago García Garc
 | Criterio de la rúbrica | Evidencia (enlace) | Nota del equipo |
 |---|---|---|
 | Plan de recopilación | [propuesta.md § 4](propuesta.md#4-plan-de-recopilación-de-datos) | 3 fuentes con estructura, formato, frecuencia, robots.txt y términos |
-| Dos fuentes funcionando | [extractores/clima.py](../../extractores/clima.py) · [extractores/rutas.py](../../extractores/rutas.py) | Rutas: pendiente del *secret* `TOMTOM_KEY` y de verificar los términos de TomTom |
+| Dos fuentes funcionando | [extractores/rutas.py](../../extractores/rutas.py) · [extractores/paradas.py](../../extractores/paradas.py) | Las dos corren solas. Falta verificar los términos de TomTom para el guardado |
 | Una fuente programada | [.github/workflows/captura-bronce.yml](../../.github/workflows/captura-bronce.yml) | Cada hora, más ejecución manual |
-| Serie de 36 o más periodos | [data/bronce/clima/](../../data/bronce/clima/) | 42,600 horas sin huecos desde 2022-01-01 |
+| Serie de 36 o más periodos | [data/bronce/rutas/](../../data/bronce/rutas/) | 1 periodo por hora desde el 12-nov-2026 03:38 UTC. Llega a 36 periodos el 13-nov a las ~15:40 UTC |
 | Metadatos de captura | Cada archivo de bronce | Fuente, URL y hora de captura (UTC) |
 
 ## Análisis Estadístico
@@ -26,7 +26,7 @@ Equipo: Joel Emiliano Salazar Figueroa (@EmiSalazarrrr) · Santiago García Garc
 |---|---|---|
 | Pregunta y cliente | [propuesta.md § 1](propuesta.md#1-ficha-del-observatorio) | Cliente: concesionarias que operan en "Los Rojos" |
 | Entrevista | [propuesta.md § 2](propuesta.md#2-entrevista-de-campo) | Plática con el asesor (realizada). Entrevista con el corporativo pendiente |
-| Tres preguntas analíticas | [propuesta.md § 3](propuesta.md#3-las-3-preguntas-analíticas) | E1: minutos por ruta y hora · E2: hora × día × lluvia · E3: rutas metropolitanas contra foráneas |
+| Tres preguntas analíticas | [propuesta.md § 3](propuesta.md#3-las-3-preguntas-analíticas) | E1: minutos por ruta y hora · E2: hora × día × tipo de ruta · E3: rutas metropolitanas contra foráneas |
 
 ## Calidad en los Sistemas de Información
 

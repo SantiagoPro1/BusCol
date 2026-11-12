@@ -1,4 +1,6 @@
-# Observatorio de Rutas Suburbanas de Colima _(nombre provisional)_
+# BusCol
+
+Observatorio de rutas suburbanas de Colima
 
 Proyecto integrador **Trusted Data Lab**: tiempos de recorrido y retrasos de las rutas de autobús que salen de la Central "Los Rojos" (Colima), con el objetivo de avisar al pasajero cuándo llega su camión.
 
@@ -9,7 +11,7 @@ Proyecto integrador **Trusted Data Lab**: tiempos de recorrido y retrasos de las
 ## Qué observa
 
 - **Tiempo de recorrido con tráfico** de "Los Rojos" a 8 destinos, cada hora (TomTom Routing API)
-- **Clima horario** en Colima desde 2022 (Open-Meteo)
+- **Paradas de camión** de Colima, una vez al día (OpenStreetMap vía Overpass)
 - **GPS de las unidades** cuando la concesionaria dé acceso
 
 ## Cómo se ejecuta
@@ -17,7 +19,7 @@ Proyecto integrador **Trusted Data Lab**: tiempos de recorrido y retrasos de las
 ```bash
 python3 extractores/rutas.py --test          # autoprueba
 TOMTOM_KEY=... python3 extractores/rutas.py  # tiempos de las 8 rutas en este momento
-python3 extractores/clima.py                 # clima: historia la primera vez, después solo horas nuevas
+python3 extractores/paradas.py               # paradas OSM (una vez al día)
 ```
 
 Solo usa la biblioteca estándar de Python 3.11 o superior. En GitHub corre solo cada hora (**Actions → Captura Bronce**) y cada corrida queda en `data/bronce/bitacora.csv`.
@@ -32,4 +34,4 @@ Solo usa la biblioteca estándar de Python 3.11 o superior. En GitHub corre solo
 | `calidad/` | Registros PSP por integrante y objetivos de calidad |
 | `.github/workflows/` | Captura programada |
 
-Datos de clima: [Open-Meteo](https://open-meteo.com) (CC BY 4.0, uso no comercial). Rutas: OpenStreetMap (ubicaciones) y TomTom.
+Paradas y ubicaciones: © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) (ODbL). Tiempos de recorrido: TomTom.

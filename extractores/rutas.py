@@ -12,7 +12,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 BRONCE = RAIZ / "data" / "bronce" / "rutas"
 API = ("https://api.tomtom.com/routing/1/calculateRoute/{o}:{d}/json"
        "?key={k}&traffic=true&travelMode=bus&departAt=now&routeType=fastest")
-UA = "ObservatorioRutasColima/1.0 (proyecto escolar; github.com/SantiagoPro1/ManzanilloAduanas)"
+UA = "BusCol/1.0 (proyecto escolar; github.com/SantiagoPro1/BusCol)"
 ROJOS = "19.24383,-103.74157"  # Central "Los Rojos", Blvd. Rodolfo Chávez Carrillo (OpenStreetMap)
 # shortcut: destinos = cabeceras municipales (OSM); cambiar por las paradas reales cuando la empresa pase sus rutas
 DESTINOS = {

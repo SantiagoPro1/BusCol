@@ -1,8 +1,8 @@
 # Propuesta del Observatorio — Trusted Data Lab
 
-**Observatorio de Rutas Suburbanas de Colima** _(nombre provisional)_
+**BusCol: observatorio de rutas suburbanas de Colima**
 Equipo: Joel Emiliano Salazar Figueroa · Santiago García García
-Repositorio: https://github.com/SantiagoPro1/ManzanilloAduanas
+Repositorio: https://github.com/SantiagoPro1/BusCol
 
 > **Cambio de proyecto (11 de noviembre de 2026).** La versión entregada en la etiqueta `e0` trataba el comercio por el Puerto de Manzanillo. Con la aprobación del profesor, el observatorio cambió a las rutas de autobús que salen de la Central "Los Rojos". La versión anterior sigue disponible en la etiqueta `e0`.
 
@@ -14,7 +14,7 @@ Repositorio: https://github.com/SantiagoPro1/ManzanilloAduanas
 |---|---|
 | **Sector** | Transporte público suburbano y foráneo de pasajeros |
 | **Región** | Zona metropolitana Colima–Villa de Álvarez y municipios conectados por autobús desde la Central de Autobuses Suburbanos "Los Rojos" (Blvd. Rodolfo Chávez Carrillo, Colima) |
-| **Pregunta detonadora** | ¿Cuánto tardan realmente las rutas que salen de "Los Rojos" y qué hace que se retrasen (hora, día, tráfico, lluvia)? ¿Se puede avisar al pasajero cuándo llega su camión? |
+| **Pregunta detonadora** | ¿Cuánto tardan realmente las rutas que salen de "Los Rojos" y qué hace que se retrasen (hora, día, tráfico)? ¿Se puede avisar al pasajero cuándo llega su camión? |
 | **Cliente potencial** | Las empresas concesionarias (por ejemplo, Nuevo Horizonte, que renta su espacio en la central) y la propia central, que pagarían por un tablero y una app de rastreo que atraiga más pasajeros. Usuarios finales: los pasajeros que hoy esperan "a ver si pasa" |
 | **Producto final** | Tablero de tiempos y retrasos por ruta, aviso tipo "tu camión llega en 6 minutos" y buzón de quejas e incidentes |
 
@@ -58,20 +58,20 @@ Lo que dijo, en resumen:
 ### E1. Variable a pronosticar
 **¿Cuántos minutos tardará cada ruta desde "Los Rojos" en la siguiente hora y el siguiente día?**
 - Variable: tiempo de recorrido (minutos) por ruta y por hora.
-- Fuente: el GPS de las unidades cuando la empresa dé acceso. Mientras tanto, el tiempo con tráfico de una API de rutas.
+- Fuente: el GPS de las unidades cuando la empresa dé acceso (datos reales de cada camión). Mientras tanto, y después como comparación, el tiempo con tráfico de TomTom.
 
 ### E2. Factores a experimentar
 **¿Qué factores aumentan de forma significativa el tiempo de recorrido?**
 - **Factor A, hora:** hora pico (7–9 h y 13–15 h) contra hora valle.
 - **Factor B, día:** entre semana contra fin de semana.
-- **Factor C, lluvia:** con lluvia contra sin lluvia (fuente 2, clima horario).
+- **Factor C, tipo de ruta:** metropolitana contra foránea, o número de paradas en el trayecto (fuente 2).
 - Diseño: ANOVA factorial sobre el retraso respecto al tiempo sin tráfico, por ruta.
 
 ### E3. Grupos multivariados a comparar
 **¿Las rutas metropolitanas se comportan distinto de las foráneas?**
 - **Metropolitanas:** Villa de Álvarez, Comala, Coquimatlán y Cuauhtémoc.
 - **Foráneas:** Tecomán, Manzanillo, Minatitlán e Ixtlahuacán.
-- Variables por ruta: tiempo medio, variabilidad, retraso por tráfico, velocidad media (km/h) y sensibilidad a la lluvia.
+- Variables por ruta: tiempo medio, variabilidad, retraso por tráfico, velocidad media (km/h) y número de paradas.
 - Técnicas: MANOVA, componentes principales y clústeres de rutas.
 
 ---
@@ -91,19 +91,20 @@ Lo que dijo, en resumen:
 | robots.txt | `https://api.tomtom.com/robots.txt` responde 404, así que no hay restricciones publicadas para la API |
 | Términos | ⚠️ **Por verificar.** Las condiciones de TomTom podrían limitar el guardado permanente de resultados. Antes de acumular historia hay que revisar sus términos para el plan gratuito. Si no lo permiten, esta fuente se reemplaza por la fuente 3 |
 
-### Fuente 2: clima horario (Open-Meteo), funcionando
+### Fuente 2: paradas de camión de OpenStreetMap (Overpass API), funcionando
 
 | Aspecto | Detalle |
 |---|---|
-| Qué mide | Temperatura, precipitación, lluvia, código de clima y viento por hora en la ubicación de "Los Rojos" |
-| URL | `https://archive-api.open-meteo.com/v1/archive` (historia) y `https://api.open-meteo.com/v1/forecast?past_days=7` (horas recientes) |
-| Estructura | JSON → `hourly.time[]` más un arreglo por variable |
+| Qué mide | Paradas de autobús (`highway=bus_stop`, `public_transport=platform`) y rutas de autobús (`route=bus`) del estado de Colima |
+| URL | `https://overpass-api.de/api/interpreter` (consulta POST con la caja 18.85,-104.40,19.45,-103.55) |
+| Estructura | JSON → `elements[]`: tipo, id, coordenadas (`lat`/`lon` o `center`) y etiquetas (`name`, `operator`, `route_ref`, etc.) |
 | Formato y acceso | API REST JSON, sin clave |
-| Frecuencia | Cada hora con GitHub Actions. Solo guarda horas nuevas |
-| Serie histórica | **42,600 horas** desde el 1 de enero de 2022, sin huecos (≥ 36 periodos) |
-| Bronce | `data/bronce/clima/AAAA-MM-DD.json`: respuesta cruda más fuente, URL y hora de captura |
-| robots.txt | `User-agent: * / Disallow: /`. Ese archivo está dirigido a buscadores que indexan páginas, no a clientes de la API. El acceso por API está autorizado expresamente en sus términos |
-| Términos | API gratuita para uso **no comercial**, con menos de 10,000 llamadas al día, 5,000 por hora y 600 por minuto, y con atribución a Open-Meteo. Hacemos unas 24 al día. Si el proyecto se comercializa (E4), hay que contratar su plan comercial |
+| Frecuencia | Una vez al día. El workflow lo llama cada hora, pero si ya existe la captura del día no vuelve a consultar |
+| Situación actual | **161 paradas** mapeadas y **0 rutas**: nadie ha mapeado todavía las rutas de camión de Colima en OSM. BusCol puede aportar ese mapeo |
+| Bronce | `data/bronce/paradas/AAAA-MM-DD.json`: respuesta cruda más fuente, consulta, licencia y hora de captura |
+| Uso | Unificar las paradas de las distintas empresas, ubicar las paradas en cada trayecto y contarlas para E3 |
+| robots.txt | `Disallow: /api/` para todos los agentes. Va dirigido a buscadores. La política de uso de Overpass permite expresamente consultas por API (menos de 10,000 al día y 1 GB). Hacemos 1 al día |
+| Términos y licencia | Datos de OpenStreetMap con licencia **ODbL**: se pueden usar y guardar citando "© OpenStreetMap contributors", y los datos derivados se comparten con la misma licencia |
 
 ### Fuente 3: GPS de las unidades (pendiente de acceso)
 
@@ -115,10 +116,10 @@ Lo que dijo, en resumen:
 
 ```
 TomTom Routing API ──► extractores/rutas.py ──► data/bronce/rutas/AAAA-MM-DD.jsonl   (tiempo por ruta y hora)
-Open-Meteo ──────────► extractores/clima.py ──► data/bronce/clima/AAAA-MM-DD.json    (clima horario crudo)
+OSM / Overpass ──────► extractores/paradas.py ► data/bronce/paradas/AAAA-MM-DD.json  (paradas, 1 vez al día)
 GPS concesionaria ───► (cuando haya acceso)  ──► data/bronce/gps/
 ambos ───────────────► extractores/bitacora.py ► data/bronce/bitacora.csv            (una fila por corrida)
-                                               data/plata/ (E1: tiempos limpios por ruta y hora, unidos con clima)
+                                               data/plata/ (E1: tiempos limpios por ruta y hora, con sus paradas)
                                                data/oro/   (E2–E3: retrasos por factor y perfil por ruta)
 ```
 
