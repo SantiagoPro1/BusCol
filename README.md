@@ -1,35 +1,35 @@
-# Observatorio del Comercio por el Puerto de Manzanillo
+# Observatorio de Rutas Suburbanas de Colima _(nombre provisional)_
 
-Proyecto integrador **Trusted Data Lab**: pronóstico y análisis del movimiento mensual de contenedores (TEU) en Manzanillo, Colima, comparado con otros puertos de México.
+Proyecto integrador **Trusted Data Lab**: tiempos de recorrido y retrasos de las rutas de autobús que salen de la Central "Los Rojos" (Colima), con el objetivo de avisar al pasajero cuándo llega su camión.
 
 **Equipo:** Joel Emiliano Salazar Figueroa · Santiago García García
 
+> La versión anterior del proyecto (Puerto de Manzanillo) está en la etiqueta `e0`.
+
 ## Qué observa
 
-- **TEU por puerto** (mensual), del *Informe Estadístico Mensual de los Puertos de México* (CGPMM, gob.mx)
-- **Tipo de cambio USD/MXN** (diario), de la API Frankfurter (tasas del Banco Central Europeo)
+- **Tiempo de recorrido con tráfico** de "Los Rojos" a 8 destinos, cada hora (TomTom Routing API)
+- **Clima horario** en Colima desde 2022 (Open-Meteo)
+- **GPS de las unidades** cuando la concesionaria dé acceso
 
 ## Cómo se ejecuta
 
 ```bash
-sudo apt-get install -y poppler-utils        # pdftotext
-python3 extractores/puertos.py --test         # autoprueba del parser
-python3 extractores/tipo_cambio.py            # tipo de cambio: solo fechas nuevas
-python3 extractores/puertos.py                # informes de puertos: solo PDF nuevos
+python3 extractores/rutas.py --test          # autoprueba
+TOMTOM_KEY=... python3 extractores/rutas.py  # tiempos de las 8 rutas en este momento
+python3 extractores/clima.py                 # clima: historia la primera vez, después solo horas nuevas
 ```
 
-Solo usa la biblioteca estándar de Python 3.11 o superior. En GitHub corre solo todos los días (**Actions → Captura Bronce**) y cada corrida queda anotada en `data/bronce/bitacora.csv`.
+Solo usa la biblioteca estándar de Python 3.11 o superior. En GitHub corre solo cada hora (**Actions → Captura Bronce**) y cada corrida queda en `data/bronce/bitacora.csv`.
 
 ## Estructura
 
 | Ruta | Contenido |
 |---|---|
-| `docs/E0/` | Propuesta (`propuesta.md`) y ficha de entrega (`ENTREGA.md`) |
+| `docs/E0/` | Propuesta y ficha de entrega |
 | `extractores/` | Un módulo por fuente, más `bitacora.py` |
-| `data/bronce/` | Datos crudos por fuente y la bitácora de ejecuciones |
-| `calidad/` | Registros PSP de tiempo y defectos por integrante y objetivos de calidad |
+| `data/bronce/` | Datos crudos por fuente y la bitácora |
+| `calidad/` | Registros PSP por integrante y objetivos de calidad |
 | `.github/workflows/` | Captura programada |
 
-**Tablero:** pendiente (E1).
-
-Fuentes citadas: CGPMM, gob.mx (uso académico; URL y fecha de cada consulta en `data/bronce/puertos/manifiesto.csv`) · Banco Central Europeo, vía frankfurter.dev.
+Datos de clima: [Open-Meteo](https://open-meteo.com) (CC BY 4.0, uso no comercial). Rutas: OpenStreetMap (ubicaciones) y TomTom.

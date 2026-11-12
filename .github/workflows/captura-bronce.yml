@@ -2,11 +2,13 @@ name: Captura Bronce
 
 on:
   schedule:
-    - cron: "0 13 * * *"   # diario 07:00 Colima (tipo de cambio diario; puertos solo baja informes nuevos)
+    - cron: "17 * * * *"   # cada hora (minuto 17 para evitar la saturación de Actions en punto)
   workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency: captura   # nunca dos capturas a la vez escribiendo los mismos archivos
 
 jobs:
   capturar:
@@ -16,10 +18,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: sudo apt-get install -y poppler-utils
-      - run: python extractores/puertos.py --test
-      - run: python extractores/tipo_cambio.py
-      - run: python extractores/puertos.py
+      - run: python extractores/rutas.py --test
+      - run: python extractores/rutas.py
+        env:
+          TOMTOM_KEY: ${{ secrets.TOMTOM_KEY }}
+      - run: python extractores/clima.py
         if: always()   # una fuente caída no detiene a la otra
       - name: Guardar datos nuevos
         if: always()   # la bitácora se guarda aunque una captura falle
@@ -27,5 +30,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/bronce
-          git diff --cached --quiet || git commit -m "bronce: captura automática $(date -u +%F)"
-          git push
+          git diff --cached --quiet || git commit -m "bronce: captura automática $(date -u +'%F %H:%M')"
+          git pull --rebase -q && git push
