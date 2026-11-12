@@ -13,6 +13,8 @@ concurrency: captura   # nunca dos capturas a la vez escribiendo los mismos arch
 jobs:
   capturar:
     runs-on: ubuntu-latest
+    env:
+      TOMTOM_KEY: ${{ secrets.TOMTOM_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -20,8 +22,7 @@ jobs:
           python-version: "3.12"
       - run: python extractores/rutas.py --test
       - run: python extractores/rutas.py
-        env:
-          TOMTOM_KEY: ${{ secrets.TOMTOM_KEY }}
+        if: env.TOMTOM_KEY != ''   # sin clave no se intenta (evita una corrida en rojo cada hora)
       - run: python extractores/clima.py
         if: always()   # una fuente caída no detiene a la otra
       - name: Guardar datos nuevos
