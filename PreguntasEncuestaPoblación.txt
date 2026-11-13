@@ -1,0 +1,64 @@
+Encuesta a la población
+
+Encuesta que se le aplicará a la población para recabar datos y así al momento de ir con el cliente le interese más el proyecto
+
+Frecuencia de uso del servicio
+
+Preguntas:
+
+¿Con qué frecuencia utilizas los autobuses que salen de la Central de Los Rojos?
+    Todos los días
+    De 3 a 5 veces por semana
+    De 1 a 2 veces por semana
+    Nunca
+
+¿Cuál es tu motivo para usarla?
+    Trabajo
+    Escuela
+    Compras
+    Visitar familiares
+
+¿Cuál es el destino al que viajas con más frecuencia?
+Aquí irían los destinos dependiendo cuál línea sea.
+
+¿En qué horario viajas normalmente?
+    7:00 - 10:00
+    10:00 - 15:00
+    15:00 - 18:00
+    18:00 - 21:00
+
+¿Qué tan seguido llega el camión más tarde de lo que esperabas?
+    Casi siempre
+    Frecuentemente 
+    Algunas veces
+    Casi nunca
+
+¿Cómo te enteras hoy de sí el camión ya pasó o viene retrasado?
+    No me entero
+    Pregunto a otras personas
+    Redes sociales
+
+¿Qué tanto tiempo sientes que pierdes por no saber cuándo llega el camión?
+    Nada
+    Poco (Menos de 10 minutos)
+    Regular (10 a 20 minutos)
+    Mucho (más de 20 minutos)
+
+¿Qué tanto te serviría saber en cuánto tiempo pasa el camión?
+    Nada útil
+    Poco útil
+    Útil
+    Muy útil
+
+¿Usarías una app que muestre la ubicación del camión en tiempo real?
+    Sí
+    No
+    Tal vez
+
+¿Usarías más el transporte público si supieras cuándo llega el camión?
+    Sí
+    No
+    Tal vez
+
+
+NOTA: Estas preguntas son preeliminares, todavía se está viendo si se agregan más o si esas son suficientes.
