@@ -50,3 +50,5 @@ inicio_utc,fuente,estado,registros_nuevos,segundos,error
 2026-11-16T22:11:49+00:00,paradas,ok,0,0.0,
 2026-11-17T04:33:10+00:00,gps_simulado,ok,20,0.0,
 2026-11-17T04:33:10+00:00,paradas,error,0,0.8,HTTPError: HTTP Error 502: Bad Gateway
+2026-11-17T14:30:41+00:00,gps_simulado,ok,115,0.0,
+2026-11-17T14:30:41+00:00,paradas,ok,161,32.5,
