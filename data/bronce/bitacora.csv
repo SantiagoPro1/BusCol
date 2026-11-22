@@ -82,3 +82,5 @@ inicio_utc,fuente,estado,registros_nuevos,segundos,error
 2026-11-21T23:23:47+00:00,paradas,ok,0,0.0,
 2026-11-22T06:56:54+00:00,gps_simulado,ok,0,0.0,
 2026-11-22T06:56:54+00:00,paradas,ok,161,36.2,
+2026-11-22T15:23:47+00:00,gps_simulado,ok,121,0.0,
+2026-11-22T15:23:47+00:00,paradas,ok,0,0.0,
