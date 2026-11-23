@@ -1,1 +1,3 @@
 fecha,inicio,fin,interrupcion_min,fase,actividad
+2026-11-22,18:00,21:30,15,DES,Integracion de fuente geoespacial OSM y pipeline de linaje E2
+2026-11-22,21:45,23:30,0,DOC,Declaracion de etica y elaboracion de documentos E2

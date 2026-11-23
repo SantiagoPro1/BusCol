@@ -1,1 +1,3 @@
 fecha,inicio,fin,interrupcion_min,fase,actividad
+2026-11-22,17:30,21:00,10,DES,Modelado vectorial con GeoPandas y buffer de corredores E2
+2026-11-22,21:15,23:15,0,PRU,Pruebas automatizadas de trazabilidad y generacion de mapa Folium
